@@ -27,10 +27,10 @@ var hints = document.querySelector('.hints');
 
 var diameter = window.prompt("Enter the diameter of the circle");
 
-if(diameter > 600 || diameter < 2 ){
+if(diameter > 300 || diameter < 1 ){
 
 
-  alert("Diameter should be in range 2 to 600");
+  alert("Diameter should be in range 1 to 300");
 
   diameter = 300;
 
@@ -55,6 +55,10 @@ but.onclick = function() {
 
   but.innerHTML = "Stop"
  // alert("this was not working")
+
+ //var text = "This program lets you control the diameter , color of circle and background color of your canvas with your voice .Just say it and its done"
+
+     // speak(text);
 
 
 }
@@ -91,10 +95,18 @@ recognition.onresult = function(event) {
   // set size
   //alert("Size")
    mColor = color.substring(4, color.length)
-  
-     diameter = mColor;
+
+   if(mColor >300 || mColor < 1){
+
+      speak("The diameter should be from 1 to 300")
+   }else{
+
+    diameter = mColor;
   
      draw();
+   }
+  
+     
   
      }else if(color.includes("color")){
   /// set color of circle
@@ -108,14 +120,27 @@ recognition.onresult = function(event) {
   
      }else if(color.includes("help")){
   
-  /// user needs help
+  
   //alert("help")
    mColor = color.substring(4, color.length)
-  /// i will show options here.. 
+  
+
+
+       var text = "Say color, followed by a color , to set the circle color. Say background , followed by a color, to set the background color. Say size, followed of a number from 1 to 300 the diameter of the circle. Say about to hear about the program"
        
   
+       speak(text)
   
+     }else if(color.includes("about")){
+
+      var text = "This program lets you control the diameter , color of circle and background color of your canvas with your voice .Just say it and its done"
+
+      speak(text);
+
      }
+
+
+
   console.log('Confidence: ' + event.results[0][0].confidence);
 }
 
@@ -136,21 +161,6 @@ recognition.onerror = function(event) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function draw() {
 var canvas = document.getElementById('circle');
 
@@ -167,5 +177,23 @@ ctx.stroke()
 ctx.fill();
 
   }
+
+
+  function speak(text){
+
+    var msg = new SpeechSynthesisUtterance();
+    var voices = window.speechSynthesis.getVoices();
+    msg.voice = voices[0];
+    msg.rate =  1;
+    msg.pitch = 2
+    msg.text = text;
+
+    msg.onend = function(e) {
+      console.log('Finished in ' + event.elapsedTime + ' seconds.');
+    };
+
+    speechSynthesis.speak(msg);
+  }
+
 
 
